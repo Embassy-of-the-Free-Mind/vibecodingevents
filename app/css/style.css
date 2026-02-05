@@ -1,0 +1,404 @@
+@import 'tailwindcss';
+
+@import './additional-styles/utility-patterns.css' layer(components);
+@import './additional-styles/theme.css';
+
+@theme {
+  --font-inter: var(--font-inter), sans-serif;
+  --font-nacelle: var(--font-nacelle), sans-serif;
+  --font-playfair: var(--font-playfair), serif;
+
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.5384;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5715;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.5333;
+  --text-base--letter-spacing: -0.0125em;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.5;
+  --text-lg--letter-spacing: -0.0125em;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.5;
+  --text-xl--letter-spacing: -0.0125em;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.415;
+  --text-2xl--letter-spacing: -0.0268em;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 1.3571;
+  --text-3xl--letter-spacing: -0.0268em;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 1.1;
+  --text-4xl--letter-spacing: -0.0268em;
+  --text-5xl: 3.5rem;
+  --text-5xl--line-height: 1;
+  --text-5xl--letter-spacing: -0.0268em;
+  --text-6xl: 4rem;
+  --text-6xl--line-height: 1;
+  --text-6xl--letter-spacing: -0.0268em;
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1;
+  --text-7xl--letter-spacing: -0.0268em;
+
+  --animate-gradient: gradient 6s linear infinite;
+
+  @keyframes gradient {
+    to {
+      background-position: 200% center;
+    }
+  }
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+/* Sticky CTA bar */
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 14px 24px;
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.sticky-cta.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ========================================
+   MAGICAL EFFECTS
+   ======================================== */
+
+/* Floating gold dust particles */
+.particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: particleFloat 15s ease-in-out infinite;
+  opacity: 0;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 14s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 16s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 13s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 15s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 11s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 2.5s; animation-duration: 17s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 0.5s; animation-duration: 14s; }
+.particle:nth-child(9) { left: 90%; animation-delay: 3.5s; animation-duration: 12s; }
+.particle:nth-child(10) { left: 15%; animation-delay: 1.5s; animation-duration: 16s; }
+.particle:nth-child(11) { left: 25%; animation-delay: 4.5s; animation-duration: 13s; }
+.particle:nth-child(12) { left: 35%; animation-delay: 2.2s; animation-duration: 15s; }
+.particle:nth-child(13) { left: 45%; animation-delay: 0.8s; animation-duration: 14s; }
+.particle:nth-child(14) { left: 55%; animation-delay: 3.8s; animation-duration: 12s; }
+.particle:nth-child(15) { left: 65%; animation-delay: 1.2s; animation-duration: 16s; }
+.particle:nth-child(16) { left: 75%; animation-delay: 4.2s; animation-duration: 11s; }
+.particle:nth-child(17) { left: 85%; animation-delay: 2.8s; animation-duration: 15s; }
+.particle:nth-child(18) { left: 95%; animation-delay: 0.3s; animation-duration: 13s; }
+.particle:nth-child(19) { left: 5%; animation-delay: 3.2s; animation-duration: 14s; }
+.particle:nth-child(20) { left: 12%; animation-delay: 1.8s; animation-duration: 16s; }
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-20vh) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Candlelight glow on headline */
+.candlelight {
+  animation: candleGlow 4s ease-in-out infinite;
+}
+
+@keyframes candleGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 30px rgba(251, 191, 36, 0.3),
+      0 0 60px rgba(251, 191, 36, 0.1);
+  }
+  25% {
+    text-shadow:
+      0 0 40px rgba(251, 191, 36, 0.4),
+      0 0 80px rgba(251, 191, 36, 0.15);
+  }
+  50% {
+    text-shadow:
+      0 0 35px rgba(251, 191, 36, 0.35),
+      0 0 70px rgba(251, 191, 36, 0.12);
+  }
+  75% {
+    text-shadow:
+      0 0 45px rgba(251, 191, 36, 0.45),
+      0 0 90px rgba(251, 191, 36, 0.18);
+  }
+}
+
+/* Subtle light rays from top */
+.light-rays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(251, 191, 36, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 30% -5%, rgba(251, 191, 36, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 70% -5%, rgba(251, 191, 36, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 2;
+  animation: rayPulse 8s ease-in-out infinite;
+}
+
+@keyframes rayPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Vignette effect */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(3, 7, 18, 0.4) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Subtle noise texture */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Floating animation for elements */
+.float-subtle {
+  animation: floatSubtle 6s ease-in-out infinite;
+}
+
+@keyframes floatSubtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Pulse glow for buttons */
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(217, 119, 6, 0.5), 0 0 60px rgba(217, 119, 6, 0.2);
+  }
+}
+
+/* Gradient text animation (slow, warm) */
+.gradient-warm {
+  background: linear-gradient(
+    90deg,
+    #f5f5f4 0%,
+    #fcd34d 25%,
+    #f5f5f4 50%,
+    #fbbf24 75%,
+    #f5f5f4 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientWarm 8s linear infinite;
+}
+
+@keyframes gradientWarm {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Alchemical symbol pulse */
+.symbol-pulse {
+  animation: symbolPulse 4s ease-in-out infinite;
+}
+
+@keyframes symbolPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* ========================================
+   MANUSCRIPT TEXTURES
+   ======================================== */
+
+/* Manuscript watermark - faded alchemical illustration */
+.manuscript-texture {
+  position: relative;
+}
+
+.manuscript-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/splendor-solis.jpg');
+  background-size: 400px;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.03;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  filter: sepia(100%) saturate(50%);
+}
+
+/* Fludd microcosm as decorative corner element */
+.corner-emblem {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-image: url('/images/fludd-microcosm.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.08;
+  pointer-events: none;
+  filter: sepia(100%) brightness(1.2);
+}
+
+.corner-emblem.top-right {
+  top: 2rem;
+  right: 2rem;
+}
+
+.corner-emblem.bottom-left {
+  bottom: 2rem;
+  left: 2rem;
+  transform: rotate(180deg);
+}
+
+/* Aged paper texture overlay */
+.aged-paper {
+  position: relative;
+}
+
+.aged-paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(180, 140, 80, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(180, 140, 80, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Grimoire card style */
+.grimoire-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(30, 27, 22, 0.9) 0%, rgba(20, 18, 15, 0.95) 100%);
+  border: 1px solid rgba(180, 140, 80, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.grimoire-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.4), transparent);
+}
+
+.grimoire-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(251, 191, 36, 0.1);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Illuminated initial */
+.illuminated {
+  font-family: var(--font-playfair), serif;
+  font-size: 3em;
+  float: left;
+  line-height: 0.8;
+  margin-right: 0.1em;
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+}
+
+/* Manuscript border decoration */
+.manuscript-border {
+  border: 1px solid rgba(180, 140, 80, 0.15);
+  position: relative;
+}
+
+.manuscript-border::before,
+.manuscript-border::after {
+  content: '✦';
+  position: absolute;
+  color: rgba(251, 191, 36, 0.3);
+  font-size: 0.75rem;
+}
+
+.manuscript-border::before {
+  top: -0.5em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.manuscript-border::after {
+  bottom: -0.5em;
+  left: 50%;
+  transform: translateX(-50%);
+}

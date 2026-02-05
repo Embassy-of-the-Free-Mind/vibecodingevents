@@ -56,10 +56,15 @@ export default function Footer() {
             </a>
           </div>
           <div className="flex gap-6 text-sm">
+            <a
+              href="/learn"
+              className="text-indigo-200/80 transition hover:text-indigo-500"
+            >
+              Learn Claude Code
+            </a>
             {[
               ["Source Library", "https://sourcelibrary.org"],
               ["PlayPower Learn", "https://playpowerlearn.com"],
-              ["Baby Sees", "https://babysees.org"],
             ].map(([name, url]) => (
               <a
                 key={name}
