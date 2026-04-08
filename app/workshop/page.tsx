@@ -381,26 +381,34 @@ export default function Workshop() {
           </div>
 
           <div className="space-y-8">
-            <PromptGroup title="Research First" color="amber">
+            <PromptGroup title="Start with Why" color="amber">
+              <Incantation>I want to build [X]. The problem I&apos;m solving is [Y].</Incantation>
+              <Incantation>Before we code, what experience should the user have?</Incantation>
+              <Incantation>The goal is to make people feel [emotion] when they use this</Incantation>
+            </PromptGroup>
+
+            <PromptGroup title="Research First" color="pink">
               <Incantation>Do some research on how to build interactive data visualizations</Incantation>
               <Incantation>Research award-winning design websites for inspiration</Incantation>
               <Incantation>Look up best practices for accessible web forms</Incantation>
             </PromptGroup>
 
-            <PromptGroup title="Paint the Vision" color="pink">
+            <PromptGroup title="Paint the Vision" color="purple">
               <Incantation>I want a personal website that feels like walking through a garden</Incantation>
               <Incantation>Make this feel more playful and friendly</Incantation>
               <Incantation>I like this direction. keep going.</Incantation>
             </PromptGroup>
 
-            <PromptGroup title="When Lost" color="purple">
+            <PromptGroup title="When Stuck" color="blue">
               <Incantation>let&apos;s step back. the core goal is...</Incantation>
+              <Incantation>that&apos;s not working. try a completely different approach</Incantation>
               <Incantation>what would you suggest?</Incantation>
             </PromptGroup>
 
-            <PromptGroup title="Let Claude Lead" color="blue">
-              <Incantation>do your research first, then make a plan</Incantation>
+            <PromptGroup title="Ship It" color="amber">
+              <Incantation>do your research first, then make a plan, then build it</Incantation>
               <Incantation>make it real and deploy it</Incantation>
+              <Incantation>commit this and keep going with the next thing</Incantation>
               <Incantation>surprise me with something creative</Incantation>
             </PromptGroup>
           </div>
