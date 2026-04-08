@@ -208,7 +208,6 @@ function FloatingOrbs() {
 }
 
 export default function Workshop() {
-  const [path, setPath] = useState<"workshop" | "own">("own");
   const [name, setName] = useState("");
 
   return (
@@ -268,37 +267,6 @@ export default function Workshop() {
           )}
         </div>
 
-        {/* Path chooser */}
-        <div className="mb-12">
-          <p className="text-center text-sm text-gray-500 mb-4">Do you have a Claude account?</p>
-          <div className="flex gap-3">
-            {[
-              { id: "own" as const, icon: "✓", label: "I have a paid Claude account" },
-              { id: "workshop" as const, icon: "☁", label: "I don't have an account" },
-            ].map((opt) => (
-              <button
-                key={opt.id}
-                onClick={() => setPath(opt.id)}
-                className={`flex-1 py-5 px-4 rounded-2xl border transition-all duration-500 text-center relative overflow-hidden group ${
-                  path === opt.id
-                    ? "bg-gradient-to-b from-amber-900/40 to-amber-950/60 border-amber-500/40 shadow-[0_0_40px_rgba(251,191,36,0.15),inset_0_1px_0_rgba(255,255,255,0.1)]"
-                    : "bg-gray-900/20 border-gray-800/50 hover:border-gray-700 hover:bg-gray-900/40"
-                }`}
-              >
-                {path === opt.id && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent" />
-                )}
-                <div className={`text-3xl mb-2 transition-transform duration-300 ${path === opt.id ? "scale-110" : "group-hover:scale-105"}`}>
-                  {opt.icon}
-                </div>
-                <div className={`font-medium text-sm relative z-10 ${path === opt.id ? "text-amber-100" : "text-gray-400"}`}>
-                  {opt.label}
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Encouragement post-it */}
         <PostIt color="yellow" rotation={-2} side="left">
           The terminal looks scary but it&apos;s just a text box. You type, it responds. That&apos;s it!
@@ -306,101 +274,50 @@ export default function Workshop() {
 
         {/* Instructions */}
         <div className="space-y-8 mb-16">
-          {path === "workshop" ? (
-            <>
-              <Step num={1} title="Open Terminal">
-                <div className="space-y-3 text-gray-400">
-                  <p><strong className="text-amber-200">Mac:</strong> Press <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Cmd + Space</code>, type <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Terminal</code>, press Enter</p>
-                  <p><strong className="text-amber-200">Windows:</strong> Press <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Win</code>, type <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">PowerShell</code>, press Enter</p>
-                </div>
-              </Step>
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-emerald-950/20 border border-emerald-700/30 backdrop-blur-sm">
+            <p className="text-emerald-300">
+              <strong>Requires:</strong> Claude Pro subscription ($20/mo) or an <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-200">Anthropic API key</a>
+            </p>
+          </div>
 
-              <PostIt color="pink" rotation={1} side="right">
-                You&apos;re doing great! Copy-paste is your friend here.
-              </PostIt>
+          <Step num={1} title="Open Terminal">
+            <div className="space-y-3 text-gray-400">
+              <p><strong className="text-amber-200">Mac:</strong> Press <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Cmd + Space</code>, type <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Terminal</code>, press Enter</p>
+              <p><strong className="text-amber-200">Windows:</strong> Press <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Win</code>, type <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">PowerShell</code>, press Enter</p>
+            </div>
+          </Step>
 
-              <Step num={2} title="Connect to Workshop">
-                <p className="text-gray-400 mb-4">Copy this and paste it in:</p>
-                <Code glow>ssh workshop@46.224.122.120</Code>
-                <p className="text-xs text-gray-500 mt-2">Press Enter, then type the password below</p>
-                <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-gray-900/80 to-gray-950 border border-gray-800/50 backdrop-blur-sm">
-                  <div className="text-xs text-amber-300/60 uppercase tracking-wider mb-2">Password</div>
-                  <code className="text-2xl text-amber-400 font-mono select-all tracking-wider">claude2026</code>
-                  <p className="text-xs text-gray-600 mt-3">Won&apos;t show as you type — that&apos;s normal and okay!</p>
-                </div>
-              </Step>
+          <Step num={2} title="Install Claude Code">
+            <Code glow>npm install -g @anthropic-ai/claude-code</Code>
+            <p className="text-xs text-gray-500 mt-3 text-center">
+              Need npm? Get Node.js from <a href="https://nodejs.org" className="text-amber-400 hover:underline">nodejs.org</a>
+            </p>
+          </Step>
 
-              <div className="relative">
-                <PostIt color="green" rotation={-1} side="left">
-                  <strong>Important!</strong> Always make a new folder for each project. It keeps things organized and Claude works better this way.
-                </PostIt>
-                <Step num={3} title="Make your space">
-                  <p className="text-gray-400 mb-4">Create a folder with your name:</p>
-                  <Code>mkdir {name || "yourname"}</Code>
-                  <Code>cd {name || "yourname"}</Code>
-                  {!name && (
-                    <p className="text-xs text-amber-300/70 mt-3 p-2 bg-amber-950/30 rounded-lg border border-amber-700/20">
-                      Enter your name above to personalize these commands!
-                    </p>
-                  )}
-                  <p className="text-xs text-amber-300/70 mt-3 p-2 bg-amber-950/30 rounded-lg border border-amber-700/20">
-                    Pro tip: Always start new projects in a fresh folder!
-                  </p>
-                </Step>
-              </div>
+          <Step num={3} title="Log in">
+            <Code>claude</Code>
+            <p className="text-gray-400 mt-4">Opens your browser to authenticate with your Claude Pro account.</p>
+            <div className="mt-3 p-3 rounded-lg bg-gray-900/50 border border-gray-800/50">
+              <p className="text-xs text-gray-500">
+                <strong className="text-amber-200/70">Using an API key instead?</strong> Set it first: <code className="text-amber-300/70 bg-gray-800 px-1.5 py-0.5 rounded">export ANTHROPIC_API_KEY=sk-...</code>
+              </p>
+            </div>
+          </Step>
 
-              <PostIt color="pink" rotation={2} side="right">
-                Almost there! One more command and you&apos;re in.
-              </PostIt>
+          <div className="relative">
+            <PostIt color="blue" rotation={1} side="right">
+              <strong>Important!</strong> Always create a new folder for each project. Claude works best with a clean workspace.
+            </PostIt>
 
-              <Step num={4} title="Start Claude">
-                <Code glow>claude</Code>
-                <p className="text-gray-400 mt-4">Type what you want to create. Press Enter. Watch magic happen.</p>
-              </Step>
-            </>
-          ) : (
-            <>
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-emerald-950/20 border border-emerald-700/30 backdrop-blur-sm">
-                <p className="text-emerald-300">
-                  <strong>Requires:</strong> Claude Pro ($20/mo) or Max ($100/mo) subscription
-                </p>
-              </div>
-
-              <Step num={1} title="Open Terminal">
-                <div className="space-y-3 text-gray-400">
-                  <p><strong className="text-amber-200">Mac:</strong> Press <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Cmd + Space</code>, type <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Terminal</code>, press Enter</p>
-                  <p><strong className="text-amber-200">Windows:</strong> Press <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">Win</code>, type <code className="text-amber-300 bg-gray-800 px-2 py-0.5 rounded">PowerShell</code>, press Enter</p>
-                </div>
-              </Step>
-
-              <Step num={2} title="Install Claude Code">
-                <Code glow>npm install -g @anthropic-ai/claude-code</Code>
-                <p className="text-xs text-gray-500 mt-3 text-center">
-                  Need npm? Get Node.js from <a href="https://nodejs.org" className="text-amber-400 hover:underline">nodejs.org</a>
-                </p>
-              </Step>
-
-              <Step num={3} title="Log in">
-                <Code>claude</Code>
-                <p className="text-gray-400 mt-4">Opens your browser to authenticate.</p>
-              </Step>
-
-              <div className="relative">
-                <PostIt color="blue" rotation={1} side="right">
-                  <strong>Important!</strong> Always create a new folder for each project. Claude works best with a clean workspace.
-                </PostIt>
-
-                <Step num={4} title="Create & start">
-                  <Code>mkdir {name ? `${name}-project` : "myproject"} && cd {name ? `${name}-project` : "myproject"}</Code>
-                  <Code glow>claude</Code>
-                  <p className="text-gray-400 mt-4">You&apos;re in! Start describing what you want to build.</p>
-                  <p className="text-xs text-amber-300/70 mt-3 p-2 bg-amber-950/30 rounded-lg border border-amber-700/20">
-                    Pro tip: New project? New folder. Every time!
-                  </p>
-                </Step>
-              </div>
-            </>
-          )}
+            <Step num={4} title="Create & start">
+              <Code>mkdir {name ? `${name}-project` : "myproject"} && cd {name ? `${name}-project` : "myproject"}</Code>
+              <Code glow>claude</Code>
+              <p className="text-gray-400 mt-4">You&apos;re in! Start describing what you want to build.</p>
+              <p className="text-xs text-amber-300/70 mt-3 p-2 bg-amber-950/30 rounded-lg border border-amber-700/20">
+                Pro tip: New project? New folder. Every time!
+              </p>
+            </Step>
+          </div>
         </div>
 
         {/* Divider */}
@@ -537,7 +454,7 @@ export default function Workshop() {
 
         {/* Footer */}
         <footer className="text-center text-sm text-gray-600 pt-8">
-          <p>Type <code className="text-amber-400/80">exit</code> twice to disconnect</p>
+          <p>Type <code className="text-amber-400/80">exit</code> or <code className="text-amber-400/80">Ctrl+C</code> to leave Claude</p>
           <p className="mt-8 text-xl animate-pulse-slow">✨</p>
           <p className="mt-2 text-amber-200/30 font-playfair italic">You&apos;ve got this</p>
         </footer>
