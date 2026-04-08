@@ -208,10 +208,11 @@ function FloatingOrbs() {
 }
 
 export default function Workshop() {
-  const [path, setPath] = useState<"workshop" | "own">("workshop");
+  const [path, setPath] = useState<"workshop" | "own">("own");
+  const [name, setName] = useState("");
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050510]">
+    <main className="relative min-h-dvh overflow-hidden bg-[#050510]">
       {/* Magical backgrounds */}
       <Starfield />
       <FloatingOrbs />
@@ -220,7 +221,7 @@ export default function Workshop() {
       {/* Gradient overlay */}
       <div className="fixed inset-0 bg-gradient-to-b from-transparent via-[#050510]/50 to-[#050510] pointer-events-none z-[1]" />
 
-      <div className="relative z-10 mx-auto max-w-xl px-6 py-12 sm:py-16">
+      <div className="relative z-10 mx-auto max-w-xl px-6 pt-16 pb-12 sm:py-16">
 
         {/* Back link */}
         <Link
@@ -241,20 +242,39 @@ export default function Workshop() {
             <span className="h-px w-12 bg-gradient-to-l from-transparent to-amber-400/50" />
           </div>
           <h1 className="font-playfair text-5xl sm:text-6xl font-semibold italic text-transparent bg-clip-text bg-gradient-to-b from-amber-100 via-amber-200 to-amber-400/80 mb-4 drop-shadow-[0_0_30px_rgba(251,191,36,0.3)] animate-glow">
-            The Workshop
+            The Claude Code Workshop
           </h1>
           <p className="text-xl text-amber-100/50">
-            Describe what you want. Watch it appear.
+            Just describe your dreams and make them a reality.
           </p>
+        </div>
+
+        {/* Name input */}
+        <div className="mb-8">
+          <label className="block text-center text-sm text-gray-400 mb-3">
+            What&apos;s your first name?
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value.toLowerCase().replace(/[^a-z]/g, ''))}
+            placeholder="Enter your name..."
+            className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700 text-center text-lg text-amber-100 placeholder-gray-600 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+          />
+          {name && (
+            <p className="text-center text-xs text-emerald-400/70 mt-2">
+              Commands below are ready for you, {name}!
+            </p>
+          )}
         </div>
 
         {/* Path chooser */}
         <div className="mb-12">
-          <p className="text-center text-sm text-gray-500 mb-4">How are you connecting?</p>
+          <p className="text-center text-sm text-gray-500 mb-4">Do you have a Claude account?</p>
           <div className="flex gap-3">
             {[
-              { id: "workshop" as const, icon: "☁", label: "Workshop Server" },
-              { id: "own" as const, icon: "💻", label: "Own Computer" },
+              { id: "own" as const, icon: "✓", label: "I have a paid Claude account" },
+              { id: "workshop" as const, icon: "☁", label: "I don't have an account" },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -280,7 +300,7 @@ export default function Workshop() {
         </div>
 
         {/* Encouragement post-it */}
-        <PostIt color="yellow" rotation={-2}>
+        <PostIt color="yellow" rotation={-2} side="left">
           The terminal looks scary but it&apos;s just a text box. You type, it responds. That&apos;s it!
         </PostIt>
 
@@ -295,7 +315,7 @@ export default function Workshop() {
                 </div>
               </Step>
 
-              <PostIt color="pink" rotation={1}>
+              <PostIt color="pink" rotation={1} side="right">
                 You&apos;re doing great! Copy-paste is your friend here.
               </PostIt>
 
@@ -310,13 +330,26 @@ export default function Workshop() {
                 </div>
               </Step>
 
-              <Step num={3} title="Make your space">
-                <p className="text-gray-400 mb-4">Create a folder with your name (replace &quot;yourname&quot;):</p>
-                <Code>mkdir yourname</Code>
-                <Code>cd yourname</Code>
-              </Step>
+              <div className="relative">
+                <PostIt color="green" rotation={-1} side="left">
+                  <strong>Important!</strong> Always make a new folder for each project. It keeps things organized and Claude works better this way.
+                </PostIt>
+                <Step num={3} title="Make your space">
+                  <p className="text-gray-400 mb-4">Create a folder with your name:</p>
+                  <Code>mkdir {name || "yourname"}</Code>
+                  <Code>cd {name || "yourname"}</Code>
+                  {!name && (
+                    <p className="text-xs text-amber-300/70 mt-3 p-2 bg-amber-950/30 rounded-lg border border-amber-700/20">
+                      Enter your name above to personalize these commands!
+                    </p>
+                  )}
+                  <p className="text-xs text-amber-300/70 mt-3 p-2 bg-amber-950/30 rounded-lg border border-amber-700/20">
+                    Pro tip: Always start new projects in a fresh folder!
+                  </p>
+                </Step>
+              </div>
 
-              <PostIt color="green" rotation={-1}>
+              <PostIt color="pink" rotation={2} side="right">
                 Almost there! One more command and you&apos;re in.
               </PostIt>
 
@@ -352,15 +385,20 @@ export default function Workshop() {
                 <p className="text-gray-400 mt-4">Opens your browser to authenticate.</p>
               </Step>
 
-              <PostIt color="blue" rotation={1}>
-                You&apos;re set up! Now create a project folder.
-              </PostIt>
+              <div className="relative">
+                <PostIt color="blue" rotation={1} side="right">
+                  <strong>Important!</strong> Always create a new folder for each project. Claude works best with a clean workspace.
+                </PostIt>
 
-              <Step num={4} title="Create & start">
-                <Code>mkdir myproject && cd myproject</Code>
-                <Code glow>claude</Code>
-                <p className="text-gray-400 mt-4">You&apos;re in! Start describing what you want to build.</p>
-              </Step>
+                <Step num={4} title="Create & start">
+                  <Code>mkdir {name ? `${name}-project` : "myproject"} && cd {name ? `${name}-project` : "myproject"}</Code>
+                  <Code glow>claude</Code>
+                  <p className="text-gray-400 mt-4">You&apos;re in! Start describing what you want to build.</p>
+                  <p className="text-xs text-amber-300/70 mt-3 p-2 bg-amber-950/30 rounded-lg border border-amber-700/20">
+                    Pro tip: New project? New folder. Every time!
+                  </p>
+                </Step>
+              </div>
             </>
           )}
         </div>
@@ -372,25 +410,69 @@ export default function Workshop() {
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
         </div>
 
+        {/* Quick reference - moved up */}
+        <div className="mb-12">
+          <h3 className="text-xs text-gray-600 uppercase tracking-widest mb-4 text-center">Essential Commands</h3>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-6">
+            {[
+              ["Ctrl+C", "Stop"],
+              ["/clear", "Reset chat"],
+              ["/resume", "Continue"],
+              ["/help", "Help"],
+              ["exit", "Leave"],
+            ].map(([key, desc]) => (
+              <div key={key} className="text-center py-3 px-2 rounded-xl bg-gray-900/30 border border-gray-800/30 hover:border-amber-700/30 hover:bg-amber-950/20 transition-all group">
+                <code className="text-amber-300 font-mono text-xs group-hover:text-amber-200 transition-colors">{key}</code>
+                <div className="text-[10px] text-gray-600 mt-1">{desc}</div>
+              </div>
+            ))}
+          </div>
+          <div className="p-4 rounded-xl bg-gradient-to-r from-purple-950/30 via-purple-900/20 to-purple-950/30 border border-purple-800/20 text-sm text-center">
+            <strong className="text-purple-300">Paste a photo:</strong>{" "}
+            <span className="text-gray-400">Drag & drop or paste screenshots directly into Claude for visual context</span>
+          </div>
+        </div>
+
+        {/* GitHub & Vercel Section */}
+        <div className="mb-12 p-6 rounded-2xl bg-gradient-to-br from-emerald-950/30 to-emerald-950/10 border border-emerald-700/20">
+          <h3 className="text-emerald-300 font-medium mb-3">Set up GitHub & Vercel for real deployment</h3>
+          <p className="text-sm text-gray-400 mb-4">
+            For your projects to live on the web, connect Claude to these free services:
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4 text-sm">
+            <div className="p-3 rounded-lg bg-gray-900/50 border border-gray-800/50">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-amber-300 hover:text-amber-200 font-medium">GitHub</a>
+              <p className="text-gray-500 text-xs mt-1">Saves your code and lets Claude push changes</p>
+            </div>
+            <div className="p-3 rounded-lg bg-gray-900/50 border border-gray-800/50">
+              <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-amber-300 hover:text-amber-200 font-medium">Vercel</a>
+              <p className="text-gray-500 text-xs mt-1">Deploys your site live with one command</p>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-4 text-center">
+            Tell Claude: "help me set up GitHub and Vercel" and it will walk you through it
+          </p>
+        </div>
+
         {/* Magic Words */}
         <div className="mb-16">
           <div className="text-center mb-10">
             <h2 className="font-playfair text-3xl sm:text-4xl font-semibold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-amber-200 to-pink-300 mb-3 animate-shimmer bg-[length:200%_auto]">
-              The Magic Words
+              Some Magic Words
             </h2>
-            <p className="text-gray-500">Incantations that make things happen</p>
+            <p className="text-gray-500">Prompts that get great results</p>
           </div>
 
           <div className="space-y-8">
-            <PromptGroup title="Paint the Vision" color="amber">
-              <Incantation>I want to make a picture book for my niece about a brave little mushroom</Incantation>
-              <Incantation>I have this idea for a personal website that feels like walking through a garden</Incantation>
-              <Incantation>I want to visualize my sleep data in a way that feels meaningful</Incantation>
+            <PromptGroup title="Research First" color="amber">
+              <Incantation>Do some research on how to build interactive data visualizations</Incantation>
+              <Incantation>Research award-winning design websites for inspiration</Incantation>
+              <Incantation>Look up best practices for accessible web forms</Incantation>
             </PromptGroup>
 
-            <PromptGroup title="Steer by Feel" color="pink">
-              <Incantation>too busy. simplify.</Incantation>
-              <Incantation>this feels cold. make it warmer.</Incantation>
+            <PromptGroup title="Paint the Vision" color="pink">
+              <Incantation>I want a personal website that feels like walking through a garden</Incantation>
+              <Incantation>Make this feel more playful and friendly</Incantation>
               <Incantation>I like this direction. keep going.</Incantation>
             </PromptGroup>
 
@@ -400,32 +482,11 @@ export default function Workshop() {
             </PromptGroup>
 
             <PromptGroup title="Let Claude Lead" color="blue">
-              <Incantation>do your research first</Incantation>
-              <Incantation>make it real</Incantation>
-              <Incantation>surprise me</Incantation>
+              <Incantation>do your research first, then make a plan</Incantation>
+              <Incantation>make it real and deploy it</Incantation>
+              <Incantation>surprise me with something creative</Incantation>
             </PromptGroup>
           </div>
-        </div>
-
-        {/* Quick reference */}
-        <div className="grid grid-cols-4 gap-2 mb-12">
-          {[
-            ["Ctrl+C", "Stop"],
-            ["exit", "Leave"],
-            ["/clear", "Reset"],
-            ["/help", "Help"],
-          ].map(([key, desc]) => (
-            <div key={key} className="text-center py-3 px-2 rounded-xl bg-gray-900/30 border border-gray-800/30 hover:border-amber-700/30 hover:bg-amber-950/20 transition-all group">
-              <code className="text-amber-300 font-mono text-xs group-hover:text-amber-200 transition-colors">{key}</code>
-              <div className="text-[10px] text-gray-600 mt-1">{desc}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Paste tip */}
-        <div className="p-4 rounded-xl bg-gradient-to-r from-amber-950/30 via-amber-900/20 to-amber-950/30 border border-amber-800/20 mb-12 text-sm text-center">
-          <strong className="text-amber-300">Paste:</strong>{" "}
-          <code className="text-amber-200/80">Cmd+V</code> (Mac) · <code className="text-amber-200/80">Ctrl+Shift+V</code> (Win)
         </div>
 
         {/* The Secret */}
@@ -535,15 +596,57 @@ function Step({ num, title, children }: { num: number; title: string; children: 
 }
 
 function Code({ children, glow }: { children: React.ReactNode; glow?: boolean }) {
+  const codeRef = useRef<HTMLSpanElement>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    const text = codeRef.current?.textContent || '';
+    try {
+      await navigator.clipboard.writeText(text.trim());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = text.trim();
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <div
-      className={`font-mono text-sm rounded-xl p-4 select-all text-sky-300 transition-all my-2 ${
+      className={`relative group font-mono text-sm rounded-xl p-4 pr-12 text-sky-300 transition-all my-2 ${
         glow
           ? "bg-gradient-to-r from-gray-900 via-gray-900/95 to-gray-900 border border-amber-600/30 shadow-[0_0_30px_rgba(251,191,36,0.1)] hover:shadow-[0_0_40px_rgba(251,191,36,0.2)]"
           : "bg-gray-950/80 border border-gray-800/50"
       }`}
     >
-      {children}
+      <span ref={codeRef} className="select-all">{children}</span>
+      <button
+        onClick={handleCopy}
+        className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-all ${
+          copied
+            ? "bg-emerald-500/20 text-emerald-400"
+            : "bg-gray-800/50 text-gray-500 hover:text-amber-300 hover:bg-gray-800"
+        }`}
+        title={copied ? "Copied!" : "Copy"}
+      >
+        {copied ? (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+          </svg>
+        )}
+      </button>
     </div>
   );
 }
@@ -574,7 +677,7 @@ function Incantation({ children }: { children: React.ReactNode }) {
   );
 }
 
-function PostIt({ children, color, rotation }: { children: React.ReactNode; color: "yellow" | "pink" | "green" | "blue"; rotation?: number }) {
+function PostIt({ children, color, rotation, side }: { children: React.ReactNode; color: "yellow" | "pink" | "green" | "blue"; rotation?: number; side?: "left" | "right" }) {
   const colors = {
     yellow: "from-amber-200 to-amber-300 text-amber-900",
     pink: "from-pink-200 to-pink-300 text-pink-900",
@@ -583,21 +686,25 @@ function PostIt({ children, color, rotation }: { children: React.ReactNode; colo
   };
 
   const shadows = {
-    yellow: "shadow-amber-400/20",
-    pink: "shadow-pink-400/20",
-    green: "shadow-emerald-400/20",
-    blue: "shadow-sky-400/20",
+    yellow: "shadow-amber-400/30",
+    pink: "shadow-pink-400/30",
+    green: "shadow-emerald-400/30",
+    blue: "shadow-sky-400/30",
   };
+
+  const sideClass = side
+    ? `lg:absolute lg:w-48 ${side === "left" ? "lg:-left-56" : "lg:-right-56"} lg:top-0`
+    : "";
 
   return (
     <div
-      className={`relative p-4 rounded-sm bg-gradient-to-br ${colors[color]} text-sm font-medium shadow-lg ${shadows[color]} my-6`}
+      className={`relative p-4 rounded-sm bg-gradient-to-br ${colors[color]} text-sm font-medium shadow-xl ${shadows[color]} my-6 ${sideClass}`}
       style={{ transform: `rotate(${rotation || 0}deg)` }}
     >
       {/* Tape effect */}
-      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 bg-white/40 rounded-sm" />
+      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 bg-white/50 rounded-sm shadow-sm" />
       {/* Content */}
-      <div className="relative z-10">{children}</div>
+      <div className="relative z-10 leading-relaxed">{children}</div>
     </div>
   );
 }
